@@ -8,9 +8,14 @@ type apiDataParser interface {
 	ParseArticleData(data []byte) ([]Article, error)
 }
 
+type indexDataStore interface {
+	IndexArticleData(articles []Article) error
+}
+
 type Indexer struct {
-	api    sbAPI
-	parser apiDataParser
+	api       sbAPI
+	parser    apiDataParser
+	datastore indexDataStore
 }
 
 func (i Indexer) Index(downloadURL string) error {
@@ -20,10 +25,16 @@ func (i Indexer) Index(downloadURL string) error {
 		return apiErr
 	}
 
-	_, parseErr := i.parser.ParseArticleData(apiData)
+	parsedData, parseErr := i.parser.ParseArticleData(apiData)
 
 	if parseErr != nil {
 		return parseErr
+	}
+
+	indexingErr := i.datastore.IndexArticleData(parsedData)
+
+	if indexingErr != nil {
+		return indexingErr
 	}
 
 	return nil

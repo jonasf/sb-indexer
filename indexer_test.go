@@ -20,8 +20,21 @@ func (api *APIFetchDataStub) GetArticleData(downloadURL string) ([]byte, error) 
 
 type APIDataParseFailStub struct{}
 
-func (parse APIDataParseFailStub) ParseArticleData(data []byte) ([]Article, error) {
+func (parse *APIDataParseFailStub) ParseArticleData(data []byte) ([]Article, error) {
 	return nil, errors.New("Data parse failed")
+}
+
+type APIDataParseStub struct{}
+
+func (parse *APIDataParseStub) ParseArticleData(data []byte) ([]Article, error) {
+	articleData := []Article{Article{}, Article{}}
+	return articleData, nil
+}
+
+type IndexDatastoreFailStub struct{}
+
+func (indexer *IndexDatastoreFailStub) IndexArticleData(articles []Article) error {
+	return errors.New("Data indexing failed")
 }
 
 func TestFailedApiDataFetch(t *testing.T) {
@@ -39,7 +52,7 @@ func TestFailedApiDataFetch(t *testing.T) {
 
 func TestFailedApiDataParse(t *testing.T) {
 	api := &APIFetchDataStub{}
-	parser := APIDataParseFailStub{}
+	parser := &APIDataParseFailStub{}
 	i := &Indexer{
 		api:    api,
 		parser: parser,
@@ -49,5 +62,22 @@ func TestFailedApiDataParse(t *testing.T) {
 
 	if err.Error() != "Data parse failed" {
 		t.Errorf("Expected error message to be \"Data parse failed\" but got %q", err)
+	}
+}
+
+func TestFailedDataIndexing(t *testing.T) {
+	api := &APIFetchDataStub{}
+	parser := &APIDataParseStub{}
+	datastore := &IndexDatastoreFailStub{}
+	i := &Indexer{
+		api:       api,
+		parser:    parser,
+		datastore: datastore,
+	}
+
+	err := i.Index("https://www.systembolaget.se/api/assortment/products/xml")
+
+	if err.Error() != "Data indexing failed" {
+		t.Errorf("Expected error message to be \"Data indexing failed\" but got %q", err)
 	}
 }
