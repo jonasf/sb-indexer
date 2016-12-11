@@ -40,10 +40,10 @@ func (i Indexer) Index(downloadURL string) error {
 	return nil
 }
 
-/*func NewIndexer() (*Indexer, error) {
-	api := &sbAPI{}
-	i := &Indexer{
-		api: api,
+func NewIndexer() Indexer {
+	return Indexer{
+		api:       sbArticleAPI{},
+		parser:    Article{},
+		datastore: DatastoreIndexer{},
 	}
-	return i, nil
-}*/
+}
