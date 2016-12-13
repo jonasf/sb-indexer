@@ -62,7 +62,7 @@ func (e Article) String() string {
                         OriginCountry: %s,
                         Producer: %s,
                         Supplier: %s,
-                        Vintage: %02d,
+                        Vintage: %s,
                         AlcoholPercentage: %f,
                         Selection: %s,
 						SelectionText: %s,

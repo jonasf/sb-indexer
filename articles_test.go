@@ -66,19 +66,19 @@ func TestParseData(t *testing.T) {
 		t.Errorf("Expected SecondaryName to be Irländsk röd lager but got %q", a.SecondaryName)
 	}
 	if a.PriceIncludingVAT != 35.90 {
-		t.Errorf("Expected PriceIncludingVAT to be 35.90 but got %q", a.PriceIncludingVAT)
+		t.Errorf("Expected PriceIncludingVAT to be 35.90 but got %f", a.PriceIncludingVAT)
 	}
 	if a.VolumeInMl != 330.00 {
-		t.Errorf("Expected VolumeInMl to be 330.00 but got %q", a.VolumeInMl)
+		t.Errorf("Expected VolumeInMl to be 330.00 but got %f", a.VolumeInMl)
 	}
 	if a.PricePerLitre != 108.79 {
-		t.Errorf("Expected PricePerLitre to be 108.79 but got %q", a.PricePerLitre)
+		t.Errorf("Expected PricePerLitre to be 108.79 but got %f", a.PricePerLitre)
 	}
 	if a.SalesStart.Year() != 2015 && a.SalesStart.Month() != 6 && a.SalesStart.Day() != 1 {
 		t.Errorf("Expected SalesStart to be 2015-06-01 but got %q", a.SalesStart)
 	}
 	if a.Expired != false {
-		t.Errorf("Expected Expired to be false but got %q", a.Expired)
+		t.Errorf("Expected Expired to be false but got %t", a.Expired)
 	}
 	if a.ArticleGroup != "Öl" {
 		t.Errorf("Expected ArticleGroup to be Öl but got %q", a.ArticleGroup)
@@ -111,7 +111,7 @@ func TestParseData(t *testing.T) {
 		t.Errorf("Expected Vintage to be 2015 but got %q", a.Vintage)
 	}
 	if a.AlcoholPercentage.float64 != 5.50 {
-		t.Errorf("Expected AlcoholPercentage to be 5.50 but got %q", a.AlcoholPercentage)
+		t.Errorf("Expected AlcoholPercentage to be 5.50 but got %f", a.AlcoholPercentage)
 	}
 	if a.Selection != "TSLS" {
 		t.Errorf("Expected Selection to be TSLS but got %q", a.Selection)
@@ -120,13 +120,13 @@ func TestParseData(t *testing.T) {
 		t.Errorf("Expected SelectionText to be Lokalt och småskaligt but got %q", a.SelectionText)
 	}
 	if a.Organic != false {
-		t.Errorf("Expected Organic to be false but got %q", a.Organic)
+		t.Errorf("Expected Organic to be false but got %t", a.Organic)
 	}
 	if a.Ethical != false {
-		t.Errorf("Expected Ethical to be false but got %q", a.Ethical)
+		t.Errorf("Expected Ethical to be false but got %t", a.Ethical)
 	}
 	if a.Koscher != false {
-		t.Errorf("Expected Koscher to be false but got %q", a.Koscher)
+		t.Errorf("Expected Koscher to be false but got %t", a.Koscher)
 	}
 	if a.IngredientDescription != "Pilsner-, munich- och karamellmalt samt humle av sorterna perle, citra och cascade." {
 		t.Errorf("Expected IngredientDescription to be Pilsner-, munich- och karamellmalt samt humle av sorterna perle, citra och cascade. but got %q", a.IngredientDescription)
