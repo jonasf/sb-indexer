@@ -29,21 +29,21 @@ func (i Indexer) Index(downloadURL string) error {
 	apiData, apiErr := i.api.GetArticleData(downloadURL)
 
 	if apiErr != nil {
-		log.Fatalf("Failed to download article data. %s", apiErr)
+		log.Printf("Failed to download article data. %s", apiErr)
 		return apiErr
 	}
 
 	parsedData, parseErr := i.parser.ParseArticleData(apiData)
 
 	if parseErr != nil {
-		log.Fatalf("Failed to parse article data. %s", parseErr)
+		log.Printf("Failed to parse article data. %s", parseErr)
 		return parseErr
 	}
 
 	indexingErr := i.datastore.IndexArticleData(parsedData)
 
 	if indexingErr != nil {
-		log.Fatalf("Failed to index article data. %s", indexingErr)
+		log.Printf("Failed to index article data. %s", indexingErr)
 		return indexingErr
 	}
 
