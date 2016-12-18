@@ -8,22 +8,24 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-type DatastoreIndexer struct{}
+type DatastoreIndexer struct {
+	serverURL string
+	indexName string
+}
 
 func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 
-	client, err := elastic.NewClient()
+	client, err := elastic.NewClient(elastic.SetURL(datastore.serverURL))
 	if err != nil {
 		return err
 	}
 
-	indexName := "articles"
-	exists, err := client.IndexExists(indexName).Do(context.TODO())
+	exists, err := client.IndexExists(datastore.indexName).Do(context.TODO())
 	if err != nil {
 		panic(err)
 	}
 	if !exists {
-		createIndex, err := client.CreateIndex(indexName).Do(context.TODO())
+		createIndex, err := client.CreateIndex(datastore.indexName).Do(context.TODO())
 		if err != nil {
 			panic(err)
 		}
@@ -34,7 +36,7 @@ func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 
 	for _, article := range articles {
 		_, err = client.Index().
-			Index(indexName).
+			Index(datastore.indexName).
 			Type("article").
 			Id(strconv.Itoa(article.ArticleID)).
 			BodyJson(article).
