@@ -2,19 +2,47 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+
+	"golang.org/x/net/context"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 type DatastoreIndexer struct{}
 
 func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 
-	i := 0
-
-	for _, article := range articles {
-		i++
-		fmt.Println(article.ArticleID, article.ArticleType, article.Name, article.SecondaryName)
+	client, err := elastic.NewClient()
+	if err != nil {
+		return err
 	}
 
-	fmt.Println("Total number or processed articles: ", i)
+	indexName := "articles"
+	exists, err := client.IndexExists(indexName).Do(context.TODO())
+	if err != nil {
+		panic(err)
+	}
+	if !exists {
+		createIndex, err := client.CreateIndex(indexName).Do(context.TODO())
+		if err != nil {
+			panic(err)
+		}
+		if !createIndex.Acknowledged {
+			// Not acknowledged
+		}
+	}
+
+	for _, article := range articles {
+		_, err = client.Index().
+			Index(indexName).
+			Type("article").
+			Id(strconv.Itoa(article.ArticleID)).
+			BodyJson(article).
+			Do(context.TODO())
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
 	return nil
 }
