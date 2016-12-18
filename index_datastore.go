@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
+
+	"log"
 
 	"golang.org/x/net/context"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -22,11 +23,13 @@ func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 
 	exists, err := client.IndexExists(datastore.indexName).Do(context.TODO())
 	if err != nil {
+		log.Panicf("Failed to connect to server. %s", err)
 		panic(err)
 	}
 	if !exists {
 		createIndex, err := client.CreateIndex(datastore.indexName).Do(context.TODO())
 		if err != nil {
+			log.Panicf("Failed to create index. %s", err)
 			panic(err)
 		}
 		if !createIndex.Acknowledged {
@@ -42,7 +45,7 @@ func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 			BodyJson(article).
 			Do(context.TODO())
 		if err != nil {
-			fmt.Println(err)
+			log.Printf("Failed to index article. %q", article)
 		}
 	}
 
