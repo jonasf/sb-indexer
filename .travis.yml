@@ -1,10 +1,17 @@
 language: go
 go:
-  - 1.8
+- 1.8
 
 install:
-  - go get golang.org/x/net/context
-  - go get gopkg.in/olivere/elastic.v5
+- go get golang.org/x/net/context
+- go get gopkg.in/olivere/elastic.v5
+- go get golang.org/x/tools/cmd/cover
+- go get github.com/mattn/goveralls
 
 script:
-  - go test -v ./...
+- go test -v ./...
+- go test -v -covermode=count -coverprofile=coverage.out $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+
+env:
+  global:
+    secure: iQeBu78OREX6IMBrJ/imtjHXXcx55Q3d7Rs045daAzkjyouP0sukq3LraMeh0ZDCBZ0uad7BIH5fKCvqXoSonTRdY7UZFxJvgLt6Xmqua6vJqxO9Frc8KfBDNlzuEHPE9Ee04XUpchNGWPHArt8Q+FrvkwDOIcTba5r97L+wJTCCkpS4XrNs8dYsCIYsSYYNf89z5620De1jhukQv2+L7TMM6rf17NFEwHmsx7esTfEreq28K5rUKGFyVyl0FWzaef5eqjOgkSySGQg5WQv435Tr4BChZvA9y1jFQCrXNu1/7wRyRCLvWPeedyvRYoT9kyNC7A6mtkTQkE1uFoGS9iPglX65qHCBPpRHvL7ZZjfAQwZ/PKg+Tt85K9hBV9G0JvQFBT3RqYFsHwm/J83RvpXQfrJJYUgFC8aHe4RPlVArWL+Nw28n/7sJUci91LEpudqap0Qg/ehFtyK9qItghswz1PrQRoyB1vTEWGCX05YSPkZ9IvYXHAenPucOG2LFAmssgo065WSG4+dIBNngjNhr20Ph/TpiVPdK3JhEqSXWmI6gIpLSa02lwlOtV7n9lVuHw83pcPSMx0lYSkpt7iVseoidHYNBSGLbOYAivGZeWCGkfnT3hxl4mqLYuxo1z6TkoXDLQNXE8vkwrj7nCr5VA5MWIRDvIl6n226Yvc0=
