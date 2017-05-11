@@ -10,7 +10,7 @@ install:
 
 script:
 - go test -v ./...
-- go test -v -covermode=count -coverprofile=coverage.out $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+- go test -v -covermode=count -coverprofile=coverage.out $HOME/gopath/bin/goveralls -service=travis-ci -repotoken $COVERALLS_TOKEN
 
 env:
   global:
