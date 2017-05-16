@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
+	"time"
 
 	"log"
 
@@ -16,7 +18,9 @@ type DatastoreIndexer struct {
 
 func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 
-	client, err := elastic.NewClient(elastic.SetURL(datastore.serverURL))
+	client, err := retryConnect(15, 5*time.Second, func() (*elastic.Client, error) {
+		return elastic.NewClient(elastic.SetURL(datastore.serverURL))
+	})
 	if err != nil {
 		return err
 	}
@@ -50,4 +54,22 @@ func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 	}
 
 	return nil
+}
+
+func retryConnect(attempts int, sleep time.Duration, callback func() (*elastic.Client, error)) (client *elastic.Client, err error) {
+	for i := 0; ; i++ {
+		client, err := callback()
+		if err == nil {
+			return client, nil
+		}
+
+		if i >= (attempts - 1) {
+			break
+		}
+
+		time.Sleep(sleep)
+
+		log.Println("Retry connecting to datastore after error:", err)
+	}
+	return nil, fmt.Errorf("after %d attempts, last error: %s", attempts, err)
 }
