@@ -115,9 +115,7 @@ func (date *salesStartDate) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 	return nil
 }
 
-type percent struct {
-	float64
-}
+type percent float64
 
 func (p *percent) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	var v string
@@ -128,7 +126,7 @@ func (p *percent) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		fmt.Println("Error parsing percent:", err)
 	}
 
-	*p = percent{parse}
+	*p = percent(parse)
 	return nil
 }
 

@@ -41,7 +41,7 @@ func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 		}
 	}
 
-	for _, article := range articles {
+	for index, article := range articles {
 		_, err = client.Index().
 			Index(datastore.indexName).
 			Type("article").
@@ -50,6 +50,9 @@ func (datastore DatastoreIndexer) IndexArticleData(articles []Article) error {
 			Do(context.TODO())
 		if err != nil {
 			log.Printf("Failed to index article. %q", article)
+		}
+		if index%1000 == 0 {
+			log.Printf("Indexed %d articles", index)
 		}
 	}
 

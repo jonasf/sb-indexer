@@ -110,7 +110,7 @@ func TestParseData(t *testing.T) {
 	if a.Vintage != "2015" {
 		t.Errorf("Expected Vintage to be 2015 but got %q", a.Vintage)
 	}
-	if a.AlcoholPercentage.float64 != 5.50 {
+	if a.AlcoholPercentage != 5.50 {
 		t.Errorf("Expected AlcoholPercentage to be 5.50 but got %f", a.AlcoholPercentage)
 	}
 	if a.Selection != "TSLS" {
