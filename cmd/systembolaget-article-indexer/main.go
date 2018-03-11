@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	indexer "github.com/jonasf/sb-indexer/internal/systembolaget-article-indexer"
+	indexer "github.com/jonasf/systembolaget-article-indexer/internal/systembolaget-article-indexer"
 )
 
 func main() {
