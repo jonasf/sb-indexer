@@ -1,18 +1,20 @@
 # Build stage
 FROM golang:1.10 AS build-env
-ADD . /src
+ADD . $GOPATH/src/build
+WORKDIR $GOPATH/src/build
 
-# TODO: Replace with dependency manager
-RUN go get golang.org/x/net/context
-RUN go get gopkg.in/olivere/elastic.v5
+## Install dependencies
+RUN go get -u github.com/golang/dep/cmd/dep
+RUN dep ensure -vendor-only
 
-RUN cd /src && CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o sb-indexer
+RUN CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o sb-indexer
 
 # Package stage
 FROM centurylink/ca-certs
 
 WORKDIR /app
 
-COPY --from=build-env /src/sb-indexer /app/
+# NOTE: hard coded $GOPATH
+COPY --from=build-env /go/src/build/sb-indexer /app/
 
 ENTRYPOINT ["./sb-indexer"]
