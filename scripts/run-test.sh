@@ -1,1 +1,0 @@
-./sb-indexer -es-url=http://localhost:9200 -es-index-name=articles -sb-api-url=https://www.systembolaget.se/api/assortment/products/xml

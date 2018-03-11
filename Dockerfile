@@ -1,7 +1,7 @@
 # Build stage
 FROM golang:1.10 AS build-env
-ADD . $GOPATH/src/github.com/jonasf/sb-indexer
-WORKDIR $GOPATH/src/github.com/jonasf/sb-indexer
+ADD . $GOPATH/src/github.com/jonasf/systembolaget-article-indexer
+WORKDIR $GOPATH/src/github.com/jonasf/systembolaget-article-indexer
 
 ## Install dependencies
 RUN go get -u github.com/golang/dep/cmd/dep
@@ -15,6 +15,6 @@ FROM centurylink/ca-certs
 WORKDIR /app
 
 # NOTE: hard coded $GOPATH
-COPY --from=build-env /go/src/github.com/jonasf/sb-indexer/build/systembolaget-article-indexer /app/
+COPY --from=build-env /go/src/github.com/jonasf/systembolaget-article-indexer/build/systembolaget-article-indexer /app/
 
 ENTRYPOINT ["./systembolaget-article-indexer"]
