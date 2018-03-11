@@ -6,4 +6,4 @@ IMAGE=systembolaget-article-indexer
 
 echo "Build Docker image"
 docker build -t $USERNAME/$IMAGE .
-docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
+docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$VERSION
