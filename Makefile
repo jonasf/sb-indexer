@@ -5,6 +5,8 @@ APPS := systembolaget-article-indexer
 
 all: clean vet fmt deps test build
 
+ci: vet deps cover
+
 deps:
 	dep ensure
 
@@ -16,6 +18,9 @@ vet:
 
 test:
 	go test -v ./...
+
+cover:
+	go test -v ./... -covermode=count -coverprofile=coverage.out
 
 build:
 	for target in $(APPS); do \
