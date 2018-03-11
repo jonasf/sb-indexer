@@ -29,5 +29,8 @@ _testmain.go
 # external packages folder
 vendor/
 
+#build
+out/
+
 sb-indexer
 articles.xml

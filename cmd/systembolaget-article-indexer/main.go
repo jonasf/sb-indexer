@@ -4,6 +4,8 @@ import (
 	"flag"
 	"log"
 	"os"
+
+	indexer "github.com/jonasf/sb-indexer/internal/systembolaget-article-indexer"
 )
 
 func main() {
@@ -26,6 +28,6 @@ func main() {
 	log.Println("es-index-name:", *esIndexNamePtr)
 	log.Println("sb-api-url:", *sbAPIURLPtr)
 
-	indexer := NewIndexer(esURL, *esIndexNamePtr)
+	indexer := indexer.NewIndexer(esURL, *esIndexNamePtr)
 	indexer.Index(*sbAPIURLPtr)
 }

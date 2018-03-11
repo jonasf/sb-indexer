@@ -1,13 +1,13 @@
 # Build stage
 FROM golang:1.10 AS build-env
-ADD . $GOPATH/src/build
-WORKDIR $GOPATH/src/build
+ADD . $GOPATH/src/github.com/jonasf/sb-indexer
+WORKDIR $GOPATH/src/github.com/jonasf/sb-indexer
 
 ## Install dependencies
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN dep ensure -vendor-only
 
-RUN CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o sb-indexer
+RUN cd cmd/systembolaget-article-indexer && CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s" -o ../../build/systembolaget-article-indexer
 
 # Package stage
 FROM centurylink/ca-certs
@@ -15,6 +15,6 @@ FROM centurylink/ca-certs
 WORKDIR /app
 
 # NOTE: hard coded $GOPATH
-COPY --from=build-env /go/src/build/sb-indexer /app/
+COPY --from=build-env /go/src/github.com/jonasf/sb-indexer/build/systembolaget-article-indexer /app/
 
-ENTRYPOINT ["./sb-indexer"]
+ENTRYPOINT ["./systembolaget-article-indexer"]
