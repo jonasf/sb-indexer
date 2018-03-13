@@ -32,5 +32,4 @@ vendor/
 #build
 out/
 
-systembolaget-article-indexer
 articles.xml
