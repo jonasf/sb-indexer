@@ -1,33 +1,18 @@
 package main
 
 import (
-	"flag"
 	"log"
-	"os"
 
 	indexer "github.com/jonasf/systembolaget-article-indexer/internal/systembolaget-article-indexer"
 )
 
 func main() {
+	configuration := LoadConfig()
 
-	esURL := os.Getenv("ES-URL")
+	log.Println("Using Elasticsearch Server:", configuration.ElasticsearchURL)
+	log.Println("Using Elasticsearch Index Name:", configuration.ElasticsearchIndex)
+	log.Println("Using Systembolaget API Url:", configuration.SystembolagetAPIURL)
 
-	if esURL == "" {
-		esURLPtr := flag.String("es-url", "http://localhost:9200", "ElasticSearch URL")
-		flag.Parse()
-		esURL = *esURLPtr
-	}
-	log.Println("Elasticsearch server address: ", esURL)
-
-	esIndexNamePtr := flag.String("es-index-name", "articles", "ElasticSearch index name")
-	sbAPIURLPtr := flag.String("sb-api-url", "https://www.systembolaget.se/api/assortment/products/xml", "Systembolaget API URL")
-
-	flag.Parse()
-
-	log.Println("es-url:", esURL)
-	log.Println("es-index-name:", *esIndexNamePtr)
-	log.Println("sb-api-url:", *sbAPIURLPtr)
-
-	indexer := indexer.NewIndexer(esURL, *esIndexNamePtr)
-	indexer.Index(*sbAPIURLPtr)
+	indexer := indexer.NewIndexer(configuration.ElasticsearchURL, configuration.ElasticsearchIndex)
+	indexer.Index(configuration.SystembolagetAPIURL)
 }
